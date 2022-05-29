@@ -1,15 +1,24 @@
-import { Center, Container, Heading } from '@chakra-ui/react';
-import React from 'react';
+import React from "react";
+import { Route,Routes} from "react-router-dom";
+import Home from "./components/Home";
+import Layout from "./components/Layout";
+import NoMatch from "./components/NoMatch";
+import CreateVoter from "./components/preVoting/CreateVoter";
+import PhaseOne from "./components/voting/phaseOne/PhaseOne";
+import PhaseTwo from "./components/voting/phaseTwo/PhaseTwo";
+import './App.css'
 
 function App() {
   return (
-    <Container marginTop='4'>
-      <Center>
-        <Heading as='h3'>Voting App</Heading>
-      </Center>
-
-      <Heading as='h6' size='md' marginTop='4'>Initialize Voting</Heading>
-    </Container>
+    <Routes>
+      <Route path="/" element={<Layout />}>
+          <Route index element={<Home />} />
+          <Route path="create-voter" element={<CreateVoter />} />
+          <Route path="phase-one" element={<PhaseOne />} />
+          <Route path="phase-two" element={<PhaseTwo />} />
+          <Route path="*" element={<NoMatch />} />
+      </Route>
+      </Routes>
   );
 }
 
