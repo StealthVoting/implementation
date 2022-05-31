@@ -30,6 +30,10 @@ const LinksData = [
     path: "/phase-two",
     name: "Phase Two"
   },
+  {
+    path: "/stats",
+    name: "Statistics"
+  },
 ];
 
 export default function Layout() {
@@ -70,7 +74,7 @@ export default function Layout() {
         ) : null}
       </Box>
 
-      <Container>
+      <Container maxWidth={''} centerContent className={'red-border container-width'}>
         <Outlet />
       </Container>
     </>
