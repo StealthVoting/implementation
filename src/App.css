@@ -1,0 +1,7 @@
+* {
+  box-sizing: border-box;
+}
+
+.black-border {
+  border: 1px solid black;
+}
