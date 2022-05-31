@@ -65,7 +65,7 @@ contract BlindVoting is Ownable {
         uint256 r,
         uint256 partyCode
     ) public {
-        require(parties[partyCode].partyCode != partyCode);
+        require(parties[partyCode].partyCode == partyCode);
         require(signHelper.verifyBlindSignature(s, Rx, Ry, r, partyCode));
 
         tally[partyCode] = tally[partyCode] + 1;
