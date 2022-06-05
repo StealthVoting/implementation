@@ -9,6 +9,7 @@ import PhaseTwo from "./components/voting/phaseTwo/PhaseTwo";
 import './App.css'
 import Stats from "./components/afterVoting/Stats";
 import ChooseVote from "./components/voting/phaseTwo/ChooseVote";
+import CreateParty from "./components/preVoting/CreateParty";
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           <Route path="choose-vote" element={<ChooseVote />} />
         </Route>
         <Route path="stats" element={<Stats />} />
+        <Route path="admin">
+          <Route index element={<Home />} />
+          <Route path="create-party" element={<CreateParty />} />
+        </Route>
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

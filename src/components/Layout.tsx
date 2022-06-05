@@ -7,10 +7,19 @@ import {
   useColorModeValue,
   Stack,
   Container,
+  Avatar,
+  Button,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  MenuOptionGroup,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon } from '@chakra-ui/icons';
 import { Outlet } from 'react-router-dom';
 import CustomLink from './utils/CustomLink';
+import { useNavigate } from "react-router-dom";
 import './Layout.css';
 
 const LinksData = [
@@ -30,14 +39,11 @@ const LinksData = [
     path: "/phase-two",
     name: "Phase Two"
   },
-  {
-    path: "/stats",
-    name: "Statistics"
-  },
 ];
 
 export default function Layout() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
 
   return (
     <>
@@ -61,6 +67,31 @@ export default function Layout() {
               ))}
             </HStack>
           </HStack>
+          <Flex alignItems={'center'}>
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant={'link'}
+                cursor={'pointer'}
+                minW={0}>
+                <Avatar
+                  size={'md'}
+                  src={
+                    'https://d2v9ipibika81v.cloudfront.net/uploads/sites/72/431539-PE9O1K-661-1140x684.jpg'
+                  }
+                />
+              </MenuButton>
+              <MenuList>
+                <MenuOptionGroup title="Administrator">
+                  <MenuItem value="create-party" onClick={() => navigate("admin/create-party", { replace: true })}>Create Party</MenuItem>
+                </MenuOptionGroup>
+                <MenuDivider />
+                <MenuOptionGroup title="General">
+                  <MenuItem value="stats" onClick={() => navigate("stats", { replace: true })}>Statistics</MenuItem>
+                </MenuOptionGroup>
+              </MenuList>
+            </Menu>
+          </Flex>
         </Flex>
 
         {isOpen ? (
@@ -74,7 +105,7 @@ export default function Layout() {
         ) : null}
       </Box>
 
-      <Container maxWidth={''} centerContent className={'red-border container-width'}>
+      <Container maxWidth={''} centerContent className={'container-width'}>
         <Outlet />
       </Container>
     </>

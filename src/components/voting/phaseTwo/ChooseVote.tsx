@@ -9,19 +9,19 @@ function ChooseVote() {
     },
     {
       id: "1",
-      name: "Party with Lotus",
+      name: "BJP",
     },
     {
       id: "2",
-      name: "Party with Hand",
+      name: "Congress",
     },
     {
       id: "3",
-      name: "Party with Broomstick",
+      name: "AAP",
     },
     {
       id: "4",
-      name: "Party with Elephant",
+      name: "SP",
     },
   ]
 
