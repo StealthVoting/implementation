@@ -1,6 +1,6 @@
 import { Box, Button, Center, Heading, Spacer, Stack, Text } from '@chakra-ui/react';
-import React, { useState } from 'react'
-import { blindVoting } from '../../utils/ethers';
+import React, { useEffect, useState } from 'react'
+import { blindVoting, blindVotingAdmin } from '../../utils/ethers';
 import InsertCard from '../utils/InsertCard';
 import './CreateVoter.css';
 
@@ -9,6 +9,8 @@ function CreateVoter() {
   const [storeData, setStoreData] = useState(false);
   const [displayData, setDisplayData] = useState(false);
   const [data, setData] = useState("Something useless");
+
+  console.log(blindVoting.address);
 
   return (
     <Box className=''>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import Home from "./components/Home";
 import Layout from "./components/Layout";
@@ -10,8 +10,28 @@ import './App.css'
 import Stats from "./components/afterVoting/Stats";
 import ChooseVote from "./components/voting/phaseTwo/ChooseVote";
 import CreateParty from "./components/preVoting/CreateParty";
+import { blindVoting, initEther } from "./utils/ethers";
 
 function App() {
+  const [loadVoting, setBlindVoting] = useState(false);
+
+  useEffect(() => {
+    initEther()
+      .then(() => {
+        console.log("Etherjs initialized");
+        setBlindVoting(true);
+      })
+      .catch(() => {
+        console.error("Etherjs cannot be inited");
+      });
+  }, [])
+
+  if (blindVoting == null) {
+    return (
+      <div className="">Loading Etherjs</div>
+    )
+  }
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>

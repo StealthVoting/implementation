@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { BlindVoting } from "../types";
-import Artifact from "../abi/BlindVoting.json";
+import Artifact from "../artifacts/contracts/BlindVoting.sol/BlindVoting.json";
 
 const url = "http://127.0.0.1:8545/"
 const provider = new ethers.providers.JsonRpcProvider(url);
@@ -10,21 +10,22 @@ let adminSigner: ethers.providers.JsonRpcSigner;
 let blindVoting: BlindVoting;
 let blindVotingAdmin: BlindVoting;
 
-(async () => {
+const initEther = async () => {
   signer = provider.getSigner(1);
   adminSigner = provider.getSigner(0);
 
-  blindVoting = new ethers.Contract(signer._address, Artifact.abi, provider) as BlindVoting;
-  blindVotingAdmin = new ethers.Contract(adminSigner._address, Artifact.abi, provider) as BlindVoting;
+  const signerAddress = await signer.getAddress();
+  const adminAddress = await adminSigner.getAddress();
 
-  const addr = await signer.getAddress();
-  console.log(addr);
-})();
+  blindVoting = new ethers.Contract(signerAddress, Artifact.abi, provider) as BlindVoting;
+  blindVotingAdmin = new ethers.Contract(adminAddress, Artifact.abi, provider) as BlindVoting;
+}
 
 export {
   provider,
   signer,
   adminSigner,
   blindVoting,
-  blindVotingAdmin
+  blindVotingAdmin,
+  initEther
 }
