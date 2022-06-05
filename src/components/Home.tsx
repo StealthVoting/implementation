@@ -4,7 +4,7 @@ import './Home.css';
 
 function Home() {
   return (
-    <Box className='black-border'>
+    <Box className=''>
       <Center>
         <Heading marginTop={100} marginBottom={50} as='h1' size='4xl' noOfLines={1}>Stealth Voting</Heading>
       </Center>
