@@ -33,6 +33,8 @@ export interface BlindSignInterface extends utils.Interface {
     "PP()": FunctionFragment;
     "Yx()": FunctionFragment;
     "Yy()": FunctionFragment;
+    "getH()": FunctionFragment;
+    "getY()": FunctionFragment;
     "n()": FunctionFragment;
     "requestBlindSignature(uint256)": FunctionFragment;
     "verifyBlindSignature(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
@@ -49,6 +51,8 @@ export interface BlindSignInterface extends utils.Interface {
       | "PP"
       | "Yx"
       | "Yy"
+      | "getH"
+      | "getY"
       | "n"
       | "requestBlindSignature"
       | "verifyBlindSignature"
@@ -63,6 +67,8 @@ export interface BlindSignInterface extends utils.Interface {
   encodeFunctionData(functionFragment: "PP", values?: undefined): string;
   encodeFunctionData(functionFragment: "Yx", values?: undefined): string;
   encodeFunctionData(functionFragment: "Yy", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getH", values?: undefined): string;
+  encodeFunctionData(functionFragment: "getY", values?: undefined): string;
   encodeFunctionData(functionFragment: "n", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "requestBlindSignature",
@@ -92,6 +98,8 @@ export interface BlindSignInterface extends utils.Interface {
   decodeFunctionResult(functionFragment: "PP", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "Yx", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "Yy", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getH", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getY", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "n", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "requestBlindSignature",
@@ -150,6 +158,14 @@ export interface BlindSign extends BaseContract {
 
     Yy(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    getH(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { hX: BigNumber; hY: BigNumber }>;
+
+    getY(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { yX: BigNumber; yY: BigNumber }>;
+
     n(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     requestBlindSignature(
@@ -189,6 +205,14 @@ export interface BlindSign extends BaseContract {
 
   Yy(overrides?: CallOverrides): Promise<BigNumber>;
 
+  getH(
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber] & { hX: BigNumber; hY: BigNumber }>;
+
+  getY(
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber] & { yX: BigNumber; yY: BigNumber }>;
+
   n(overrides?: CallOverrides): Promise<BigNumber>;
 
   requestBlindSignature(
@@ -227,6 +251,14 @@ export interface BlindSign extends BaseContract {
     Yx(overrides?: CallOverrides): Promise<BigNumber>;
 
     Yy(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getH(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { hX: BigNumber; hY: BigNumber }>;
+
+    getY(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { yX: BigNumber; yY: BigNumber }>;
 
     n(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -270,6 +302,10 @@ export interface BlindSign extends BaseContract {
 
     Yy(overrides?: CallOverrides): Promise<BigNumber>;
 
+    getH(overrides?: CallOverrides): Promise<BigNumber>;
+
+    getY(overrides?: CallOverrides): Promise<BigNumber>;
+
     n(overrides?: CallOverrides): Promise<BigNumber>;
 
     requestBlindSignature(
@@ -309,6 +345,10 @@ export interface BlindSign extends BaseContract {
     Yx(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     Yy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    getY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     n(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

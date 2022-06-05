@@ -32,7 +32,9 @@ export interface BlindVotingInterface extends utils.Interface {
   functions: {
     "addParty(uint256,string)": FunctionFragment;
     "castVote(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "getH()": FunctionFragment;
     "getVotesForPartyCode(uint256)": FunctionFragment;
+    "getY()": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
     "requestBlindSign(uint256)": FunctionFragment;
@@ -44,7 +46,9 @@ export interface BlindVotingInterface extends utils.Interface {
     nameOrSignatureOrTopic:
       | "addParty"
       | "castVote"
+      | "getH"
       | "getVotesForPartyCode"
+      | "getY"
       | "owner"
       | "renounceOwnership"
       | "requestBlindSign"
@@ -71,10 +75,12 @@ export interface BlindVotingInterface extends utils.Interface {
       BigNumberish
     ]
   ): string;
+  encodeFunctionData(functionFragment: "getH", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "getVotesForPartyCode",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "getY", values?: undefined): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "renounceOwnership",
@@ -95,10 +101,12 @@ export interface BlindVotingInterface extends utils.Interface {
 
   decodeFunctionResult(functionFragment: "addParty", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "castVote", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "getH", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "getVotesForPartyCode",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "getY", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
@@ -180,10 +188,18 @@ export interface BlindVoting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    getH(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
+
     getVotesForPartyCode(
       partyCode: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[BigNumber] & { votes: BigNumber }>;
+
+    getY(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
 
     owner(overrides?: CallOverrides): Promise<[string]>;
 
@@ -224,10 +240,18 @@ export interface BlindVoting extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  getH(
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
+
   getVotesForPartyCode(
     partyCode: BigNumberish,
     overrides?: CallOverrides
   ): Promise<BigNumber>;
+
+  getY(
+    overrides?: CallOverrides
+  ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
 
   owner(overrides?: CallOverrides): Promise<string>;
 
@@ -268,10 +292,18 @@ export interface BlindVoting extends BaseContract {
       overrides?: CallOverrides
     ): Promise<void>;
 
+    getH(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
+
     getVotesForPartyCode(
       partyCode: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getY(
+      overrides?: CallOverrides
+    ): Promise<[BigNumber, BigNumber] & { x: BigNumber; y: BigNumber }>;
 
     owner(overrides?: CallOverrides): Promise<string>;
 
@@ -322,10 +354,14 @@ export interface BlindVoting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    getH(overrides?: CallOverrides): Promise<BigNumber>;
+
     getVotesForPartyCode(
       partyCode: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
+
+    getY(overrides?: CallOverrides): Promise<BigNumber>;
 
     owner(overrides?: CallOverrides): Promise<BigNumber>;
 
@@ -367,10 +403,14 @@ export interface BlindVoting extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
+    getH(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     getVotesForPartyCode(
       partyCode: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
+
+    getY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     owner(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 

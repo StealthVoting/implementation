@@ -4,21 +4,22 @@ import { assert } from "console";
 import crypto from "crypto";
 import { curve, ec } from "elliptic";
 import { BigNumber } from "ethers";
+import getRandomValues from "get-random-values";
 import { artifacts, ethers, waffle } from "hardhat";
 import * as web3BN from "web3-utils";
 
 import { BlindVoting } from "../../src/types";
 import { Signers } from "../types";
 
-// function randNum(): bigint {
-//   const bytes = new Uint8Array(8);
+function randNum(): string {
+  const bytes = new Uint8Array(8);
 
-//   crypto.getRandomValues(bytes);
+  getRandomValues(bytes);
 
-//   const bytesHex = bytes.reduce((o, v) => o + ("00" + v.toString(16)).slice(-2), "");
+  const bytesHex = bytes.reduce((o, v) => o + ("00" + v.toString(16)).slice(-2), "");
 
-//   return BigInt("0x" + bytesHex);
-// }
+  return BigInt("0x" + bytesHex).toString(16);
+}
 
 describe("Unit tests for BlindVoting", function () {
   before(async function () {
@@ -31,8 +32,10 @@ describe("Unit tests for BlindVoting", function () {
 
   describe("BlindVoting", function () {
     // Signer Data
-    const x = web3BN.toBN("0x81C603CC");
-    const r = web3BN.toBN("0xDCA717CE");
+    // const x = web3BN.toBN("0x81C603CC");
+    // const r = web3BN.toBN("0xDCA717CE");
+    const x = web3BN.toBN(randNum());
+    const r = web3BN.toBN(randNum());
 
     let Y: ec.KeyPair;
     let H: ec.KeyPair;
@@ -59,9 +62,12 @@ describe("Unit tests for BlindVoting", function () {
       H = this.EC.keyFromPrivate(r.toString(16));
 
       // // Voter
-      a = web3BN.toBN("0x51B52D04");
-      b = web3BN.toBN("0x17CF17F7");
-      w = web3BN.toBN("0x854A8029");
+      // a = web3BN.toBN("0x51B52D04");
+      // b = web3BN.toBN("0x17CF17F7");
+      // w = web3BN.toBN("0x854A8029");
+      a = web3BN.toBN(randNum());
+      b = web3BN.toBN(randNum());
+      w = web3BN.toBN(randNum());
 
       A = this.EC.keyFromPrivate(a.toString(16));
       B = this.EC.keyFromPrivate(b.toString(16));
@@ -86,6 +92,14 @@ describe("Unit tests for BlindVoting", function () {
     });
 
     it("should deploy contract", async function () {
+      const Y = await this.blindVoting.connect(this.signers.admin).getY();
+      const H = await this.blindVoting.connect(this.signers.admin).getH();
+
+      // console.log("Y:- ", Y[0].toHexString(), " ", Y[1].toHexString());
+      // console.log("H:- ", H[0].toHexString(), " ", H[1].toHexString());
+
+      assert(Y != null && H != null);
+
       // expect(await this.blindVoting.connect(this.signers.admin))
     });
 

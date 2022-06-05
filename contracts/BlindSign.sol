@@ -40,6 +40,16 @@ contract BlindSign {
         Hy = _Hy;
     }
 
+    function getY() public view returns (uint256 yX, uint256 yY) {
+        yX = Yx;
+        yY = Yy;
+    }
+
+    function getH() public view returns (uint256 hX, uint256 hY) {
+        hX = Hx;
+        hY = Hy;
+    }
+
     function requestBlindSignature(uint256 u2) public view returns (uint256 z) {
         z = r + (x * u2);
     }

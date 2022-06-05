@@ -1,1 +1,2 @@
+import "./blindVoting";
 import "./greeter";

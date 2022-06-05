@@ -33,10 +33,13 @@ contract BlindVoting is Ownable {
         signHelper = new BlindSign(_x, _r, _Yx, _Yy, _Hx, _Hy);
     }
 
-    // function getKey() external onlyOwner returns (uint256 x, uint256 y) {
-    //     x = signHelper.Yx;
-    //     y = signHelper.Yy;
-    // }
+    function getY() public view onlyOwner returns (uint256 x, uint256 y) {
+        (x, y) = signHelper.getY();
+    }
+
+    function getH() public view onlyOwner returns (uint256 x, uint256 y) {
+        (x, y) = signHelper.getH();
+    }
 
     function addParty(uint256 partyCode, string memory partyName) public onlyOwner {
         Party memory newParty = parties[partyCode];
