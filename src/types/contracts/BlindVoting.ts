@@ -31,11 +31,11 @@ import type {
 export interface BlindVotingInterface extends utils.Interface {
   functions: {
     "addParty(uint256,string)": FunctionFragment;
-    "castVote(uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
+    "castVote(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
     "getVotesForPartyCode(uint256)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
-    "requestBlindSign(uint256,uint256)": FunctionFragment;
+    "requestBlindSign(uint256)": FunctionFragment;
     "signHelper()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -63,6 +63,11 @@ export interface BlindVotingInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
@@ -77,7 +82,7 @@ export interface BlindVotingInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "requestBlindSign",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "signHelper",
@@ -162,10 +167,15 @@ export interface BlindVoting extends BaseContract {
     ): Promise<ContractTransaction>;
 
     castVote(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       partyCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
@@ -182,12 +192,9 @@ export interface BlindVoting extends BaseContract {
     ): Promise<ContractTransaction>;
 
     requestBlindSign(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }
-    >;
+    ): Promise<[BigNumber] & { z: BigNumber }>;
 
     signHelper(overrides?: CallOverrides): Promise<[string]>;
 
@@ -204,10 +211,15 @@ export interface BlindVoting extends BaseContract {
   ): Promise<ContractTransaction>;
 
   castVote(
-    s: BigNumberish,
-    Rx: BigNumberish,
-    Ry: BigNumberish,
-    r: BigNumberish,
+    ZdashX: BigNumberish,
+    ZdashY: BigNumberish,
+    KX: BigNumberish,
+    KY: BigNumberish,
+    MX: BigNumberish,
+    MY: BigNumberish,
+    PX: BigNumberish,
+    PY: BigNumberish,
+    u1: BigNumberish,
     partyCode: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
@@ -224,10 +236,9 @@ export interface BlindVoting extends BaseContract {
   ): Promise<ContractTransaction>;
 
   requestBlindSign(
-    m1Dash: BigNumberish,
-    m2Dash: BigNumberish,
+    u2: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }>;
+  ): Promise<BigNumber>;
 
   signHelper(overrides?: CallOverrides): Promise<string>;
 
@@ -244,10 +255,15 @@ export interface BlindVoting extends BaseContract {
     ): Promise<void>;
 
     castVote(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       partyCode: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
@@ -262,12 +278,9 @@ export interface BlindVoting extends BaseContract {
     renounceOwnership(overrides?: CallOverrides): Promise<void>;
 
     requestBlindSign(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }
-    >;
+    ): Promise<BigNumber>;
 
     signHelper(overrides?: CallOverrides): Promise<string>;
 
@@ -296,10 +309,15 @@ export interface BlindVoting extends BaseContract {
     ): Promise<BigNumber>;
 
     castVote(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       partyCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
@@ -316,8 +334,7 @@ export interface BlindVoting extends BaseContract {
     ): Promise<BigNumber>;
 
     requestBlindSign(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
@@ -337,10 +354,15 @@ export interface BlindVoting extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     castVote(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       partyCode: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
@@ -357,8 +379,7 @@ export interface BlindVoting extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     requestBlindSign(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 

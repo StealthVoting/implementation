@@ -25,62 +25,48 @@ import type {
 export interface BlindSignInterface extends utils.Interface {
   functions: {
     "AA()": FunctionFragment;
-    "BnB()": FunctionFragment;
+    "BB()": FunctionFragment;
     "GX()": FunctionFragment;
     "GY()": FunctionFragment;
+    "Hx()": FunctionFragment;
+    "Hy()": FunctionFragment;
     "PP()": FunctionFragment;
-    "Qx()": FunctionFragment;
-    "Qy()": FunctionFragment;
-    "l1()": FunctionFragment;
-    "l2()": FunctionFragment;
+    "Yx()": FunctionFragment;
+    "Yy()": FunctionFragment;
     "n()": FunctionFragment;
-    "r1Dash()": FunctionFragment;
-    "r2Dash()": FunctionFragment;
-    "requestBlindSignature(uint256,uint256)": FunctionFragment;
-    "verifyBlindSignature(uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
-    "xr1Dash()": FunctionFragment;
-    "xr2Dash()": FunctionFragment;
-    "yr1Dash()": FunctionFragment;
-    "yr2Dash()": FunctionFragment;
+    "requestBlindSignature(uint256)": FunctionFragment;
+    "verifyBlindSignature(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)": FunctionFragment;
   };
 
   getFunction(
     nameOrSignatureOrTopic:
       | "AA"
-      | "BnB"
+      | "BB"
       | "GX"
       | "GY"
+      | "Hx"
+      | "Hy"
       | "PP"
-      | "Qx"
-      | "Qy"
-      | "l1"
-      | "l2"
+      | "Yx"
+      | "Yy"
       | "n"
-      | "r1Dash"
-      | "r2Dash"
       | "requestBlindSignature"
       | "verifyBlindSignature"
-      | "xr1Dash"
-      | "xr2Dash"
-      | "yr1Dash"
-      | "yr2Dash"
   ): FunctionFragment;
 
   encodeFunctionData(functionFragment: "AA", values?: undefined): string;
-  encodeFunctionData(functionFragment: "BnB", values?: undefined): string;
+  encodeFunctionData(functionFragment: "BB", values?: undefined): string;
   encodeFunctionData(functionFragment: "GX", values?: undefined): string;
   encodeFunctionData(functionFragment: "GY", values?: undefined): string;
+  encodeFunctionData(functionFragment: "Hx", values?: undefined): string;
+  encodeFunctionData(functionFragment: "Hy", values?: undefined): string;
   encodeFunctionData(functionFragment: "PP", values?: undefined): string;
-  encodeFunctionData(functionFragment: "Qx", values?: undefined): string;
-  encodeFunctionData(functionFragment: "Qy", values?: undefined): string;
-  encodeFunctionData(functionFragment: "l1", values?: undefined): string;
-  encodeFunctionData(functionFragment: "l2", values?: undefined): string;
+  encodeFunctionData(functionFragment: "Yx", values?: undefined): string;
+  encodeFunctionData(functionFragment: "Yy", values?: undefined): string;
   encodeFunctionData(functionFragment: "n", values?: undefined): string;
-  encodeFunctionData(functionFragment: "r1Dash", values?: undefined): string;
-  encodeFunctionData(functionFragment: "r2Dash", values?: undefined): string;
   encodeFunctionData(
     functionFragment: "requestBlindSignature",
-    values: [BigNumberish, BigNumberish]
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
     functionFragment: "verifyBlindSignature",
@@ -89,26 +75,24 @@ export interface BlindSignInterface extends utils.Interface {
       BigNumberish,
       BigNumberish,
       BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
       BigNumberish
     ]
   ): string;
-  encodeFunctionData(functionFragment: "xr1Dash", values?: undefined): string;
-  encodeFunctionData(functionFragment: "xr2Dash", values?: undefined): string;
-  encodeFunctionData(functionFragment: "yr1Dash", values?: undefined): string;
-  encodeFunctionData(functionFragment: "yr2Dash", values?: undefined): string;
 
   decodeFunctionResult(functionFragment: "AA", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "BnB", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "BB", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "GX", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "GY", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "Hx", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "Hy", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "PP", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "Qx", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "Qy", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "l1", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "l2", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "Yx", data: BytesLike): Result;
+  decodeFunctionResult(functionFragment: "Yy", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "n", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "r1Dash", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "r2Dash", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "requestBlindSignature",
     data: BytesLike
@@ -117,10 +101,6 @@ export interface BlindSignInterface extends utils.Interface {
     functionFragment: "verifyBlindSignature",
     data: BytesLike
   ): Result;
-  decodeFunctionResult(functionFragment: "xr1Dash", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "xr2Dash", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "yr1Dash", data: BytesLike): Result;
-  decodeFunctionResult(functionFragment: "yr2Dash", data: BytesLike): Result;
 
   events: {};
 }
@@ -154,150 +134,119 @@ export interface BlindSign extends BaseContract {
   functions: {
     AA(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    BnB(overrides?: CallOverrides): Promise<[BigNumber]>;
+    BB(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     GX(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     GY(overrides?: CallOverrides): Promise<[BigNumber]>;
 
+    Hx(overrides?: CallOverrides): Promise<[BigNumber]>;
+
+    Hy(overrides?: CallOverrides): Promise<[BigNumber]>;
+
     PP(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    Qx(overrides?: CallOverrides): Promise<[BigNumber]>;
+    Yx(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    Qy(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    l1(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    l2(overrides?: CallOverrides): Promise<[BigNumber]>;
+    Yy(overrides?: CallOverrides): Promise<[BigNumber]>;
 
     n(overrides?: CallOverrides): Promise<[BigNumber]>;
 
-    r1Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    r2Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
-
     requestBlindSignature(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }
-    >;
+    ): Promise<[BigNumber] & { z: BigNumber }>;
 
     verifyBlindSignature(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
-      m: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[boolean] & { isValid: boolean }>;
-
-    xr1Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    xr2Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    yr1Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
-
-    yr2Dash(overrides?: CallOverrides): Promise<[BigNumber]>;
   };
 
   AA(overrides?: CallOverrides): Promise<BigNumber>;
 
-  BnB(overrides?: CallOverrides): Promise<BigNumber>;
+  BB(overrides?: CallOverrides): Promise<BigNumber>;
 
   GX(overrides?: CallOverrides): Promise<BigNumber>;
 
   GY(overrides?: CallOverrides): Promise<BigNumber>;
 
+  Hx(overrides?: CallOverrides): Promise<BigNumber>;
+
+  Hy(overrides?: CallOverrides): Promise<BigNumber>;
+
   PP(overrides?: CallOverrides): Promise<BigNumber>;
 
-  Qx(overrides?: CallOverrides): Promise<BigNumber>;
+  Yx(overrides?: CallOverrides): Promise<BigNumber>;
 
-  Qy(overrides?: CallOverrides): Promise<BigNumber>;
-
-  l1(overrides?: CallOverrides): Promise<BigNumber>;
-
-  l2(overrides?: CallOverrides): Promise<BigNumber>;
+  Yy(overrides?: CallOverrides): Promise<BigNumber>;
 
   n(overrides?: CallOverrides): Promise<BigNumber>;
 
-  r1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-  r2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
   requestBlindSignature(
-    m1Dash: BigNumberish,
-    m2Dash: BigNumberish,
+    u2: BigNumberish,
     overrides?: CallOverrides
-  ): Promise<[BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }>;
+  ): Promise<BigNumber>;
 
   verifyBlindSignature(
-    s: BigNumberish,
-    Rx: BigNumberish,
-    Ry: BigNumberish,
-    r: BigNumberish,
-    m: BigNumberish,
+    ZdashX: BigNumberish,
+    ZdashY: BigNumberish,
+    KX: BigNumberish,
+    KY: BigNumberish,
+    MX: BigNumberish,
+    MY: BigNumberish,
+    PX: BigNumberish,
+    PY: BigNumberish,
+    u1: BigNumberish,
     overrides?: CallOverrides
   ): Promise<boolean>;
-
-  xr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-  xr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-  yr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-  yr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
 
   callStatic: {
     AA(overrides?: CallOverrides): Promise<BigNumber>;
 
-    BnB(overrides?: CallOverrides): Promise<BigNumber>;
+    BB(overrides?: CallOverrides): Promise<BigNumber>;
 
     GX(overrides?: CallOverrides): Promise<BigNumber>;
 
     GY(overrides?: CallOverrides): Promise<BigNumber>;
 
+    Hx(overrides?: CallOverrides): Promise<BigNumber>;
+
+    Hy(overrides?: CallOverrides): Promise<BigNumber>;
+
     PP(overrides?: CallOverrides): Promise<BigNumber>;
 
-    Qx(overrides?: CallOverrides): Promise<BigNumber>;
+    Yx(overrides?: CallOverrides): Promise<BigNumber>;
 
-    Qy(overrides?: CallOverrides): Promise<BigNumber>;
-
-    l1(overrides?: CallOverrides): Promise<BigNumber>;
-
-    l2(overrides?: CallOverrides): Promise<BigNumber>;
+    Yy(overrides?: CallOverrides): Promise<BigNumber>;
 
     n(overrides?: CallOverrides): Promise<BigNumber>;
 
-    r1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    r2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
     requestBlindSignature(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<
-      [BigNumber, BigNumber] & { s1Dash: BigNumber; s2Dash: BigNumber }
-    >;
+    ): Promise<BigNumber>;
 
     verifyBlindSignature(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
-      m: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<boolean>;
-
-    xr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    xr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    yr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    yr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   filters: {};
@@ -305,98 +254,80 @@ export interface BlindSign extends BaseContract {
   estimateGas: {
     AA(overrides?: CallOverrides): Promise<BigNumber>;
 
-    BnB(overrides?: CallOverrides): Promise<BigNumber>;
+    BB(overrides?: CallOverrides): Promise<BigNumber>;
 
     GX(overrides?: CallOverrides): Promise<BigNumber>;
 
     GY(overrides?: CallOverrides): Promise<BigNumber>;
 
+    Hx(overrides?: CallOverrides): Promise<BigNumber>;
+
+    Hy(overrides?: CallOverrides): Promise<BigNumber>;
+
     PP(overrides?: CallOverrides): Promise<BigNumber>;
 
-    Qx(overrides?: CallOverrides): Promise<BigNumber>;
+    Yx(overrides?: CallOverrides): Promise<BigNumber>;
 
-    Qy(overrides?: CallOverrides): Promise<BigNumber>;
-
-    l1(overrides?: CallOverrides): Promise<BigNumber>;
-
-    l2(overrides?: CallOverrides): Promise<BigNumber>;
+    Yy(overrides?: CallOverrides): Promise<BigNumber>;
 
     n(overrides?: CallOverrides): Promise<BigNumber>;
 
-    r1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    r2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
     requestBlindSignature(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     verifyBlindSignature(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
-      m: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<BigNumber>;
-
-    xr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    xr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    yr1Dash(overrides?: CallOverrides): Promise<BigNumber>;
-
-    yr2Dash(overrides?: CallOverrides): Promise<BigNumber>;
   };
 
   populateTransaction: {
     AA(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    BnB(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    BB(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     GX(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     GY(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
+    Hx(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
+    Hy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+
     PP(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    Qx(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    Yx(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    Qy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    l1(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    l2(overrides?: CallOverrides): Promise<PopulatedTransaction>;
+    Yy(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
     n(overrides?: CallOverrides): Promise<PopulatedTransaction>;
 
-    r1Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    r2Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
     requestBlindSignature(
-      m1Dash: BigNumberish,
-      m2Dash: BigNumberish,
+      u2: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     verifyBlindSignature(
-      s: BigNumberish,
-      Rx: BigNumberish,
-      Ry: BigNumberish,
-      r: BigNumberish,
-      m: BigNumberish,
+      ZdashX: BigNumberish,
+      ZdashY: BigNumberish,
+      KX: BigNumberish,
+      KY: BigNumberish,
+      MX: BigNumberish,
+      MY: BigNumberish,
+      PX: BigNumberish,
+      PY: BigNumberish,
+      u1: BigNumberish,
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
-
-    xr1Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    xr2Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    yr1Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
-
-    yr2Dash(overrides?: CallOverrides): Promise<PopulatedTransaction>;
   };
 }

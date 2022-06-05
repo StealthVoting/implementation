@@ -1,58 +1,24 @@
 import type { SignerWithAddress } from "@nomiclabs/hardhat-ethers/dist/src/signer-with-address";
-import { ec } from "elliptic";
+// import BN from "bn.js";
+import { assert } from "console";
+import crypto from "crypto";
+import { curve, ec } from "elliptic";
+import { BigNumber } from "ethers";
 import { artifacts, ethers, waffle } from "hardhat";
+import * as web3BN from "web3-utils";
 
 import { BlindVoting } from "../../src/types";
 import { Signers } from "../types";
 
-function rnd256(): bigint {
-  const bytes = new Uint8Array(32);
+// function randNum(): bigint {
+//   const bytes = new Uint8Array(8);
 
-  window.crypto.getRandomValues(bytes);
+//   crypto.getRandomValues(bytes);
 
-  const bytesHex = bytes.reduce((o, v) => o + ("00" + v.toString(16)).slice(-2), "");
+//   const bytesHex = bytes.reduce((o, v) => o + ("00" + v.toString(16)).slice(-2), "");
 
-  return BigInt("0x" + bytesHex);
-}
-
-function gcd(a: bigint, b: bigint): bigint {
-  if (!b) {
-    return a;
-  }
-
-  return gcd(b, a % b);
-}
-
-function randCoPrime(): bigint[] {
-  const wz: bigint[] = [];
-
-  wz[0] = rnd256();
-
-  for (let i = 2; i < 2 ** 32; i++) {
-    if (gcd(wz[0], BigInt(i)) === BigInt(1)) {
-      wz[1] = BigInt(i);
-      return wz;
-    }
-  }
-
-  return wz;
-}
-
-function extendedEuclid(wz: bigint[], ed: bigint[]) {
-  if (wz[0] === BigInt(0)) {
-    ed[0] = BigInt(0);
-    ed[1] = BigInt(1);
-    return;
-  }
-
-  wz[0] = wz[1] % wz[0];
-  wz[1] = wz[0];
-
-  extendedEuclid(wz, ed);
-
-  ed[0] = ed[1] - (wz[1] / wz[0]) * ed[0];
-  ed[1] = ed[0];
-}
+//   return BigInt("0x" + bytesHex);
+// }
 
 describe("Unit tests for BlindVoting", function () {
   before(async function () {
@@ -64,38 +30,50 @@ describe("Unit tests for BlindVoting", function () {
   });
 
   describe("BlindVoting", function () {
-    let ecKeyPair: ec.KeyPair;
-    let kR1Dash: ec.KeyPair, kR2Dash: ec.KeyPair;
-    let l1: bigint, l2: bigint;
+    // Signer Data
+    const x = web3BN.toBN("0x81C603CC");
+    const r = web3BN.toBN("0xDCA717CE");
 
-    const a = rnd256();
-    const b = rnd256();
-    const wz = randCoPrime();
-    const ed: bigint[] = [];
-    extendedEuclid(wz, ed);
+    let Y: ec.KeyPair;
+    let H: ec.KeyPair;
 
-    beforeEach(async function () {
-      ecKeyPair = this.EC.genKeyPair();
-      kR1Dash = this.EC.genKeyPair();
-      kR2Dash = this.EC.genKeyPair();
+    // Voter Data
+    let a, b, w;
+    let u1,
+      u2,
+      M: curve.base.BasePoint,
+      K: ec.KeyPair,
+      P: curve.base.BasePoint,
+      Q: curve.base.BasePoint,
+      A: ec.KeyPair,
+      B: ec.KeyPair;
 
-      ecKeyPair.getPrivate();
+    let z: BigNumber;
 
-      l1 = rnd256();
-      l2 = rnd256();
+    before(async function () {
+      // Signer
+      // x = randNum();
+      // r = randNum();
+
+      Y = this.EC.keyFromPrivate(x.toString(16));
+      H = this.EC.keyFromPrivate(r.toString(16));
+
+      // // Voter
+      a = web3BN.toBN("0x51B52D04");
+      b = web3BN.toBN("0x17CF17F7");
+      w = web3BN.toBN("0x854A8029");
+
+      A = this.EC.keyFromPrivate(a.toString(16));
+      B = this.EC.keyFromPrivate(b.toString(16));
+      K = this.EC.keyFromPrivate(w.toString(16));
 
       const artifactInput = [
-        ecKeyPair.getPrivate().toString(10),
-        kR1Dash.getPrivate().toString(10),
-        kR2Dash.getPrivate().toString(10),
-        ecKeyPair.getPublic().getX().toString(10),
-        ecKeyPair.getPublic().getY().toString(10),
-        l1.toString(10),
-        l2.toString(10),
-        kR1Dash.getPublic().getX().toString(10),
-        kR1Dash.getPublic().getY().toString(10),
-        kR2Dash.getPublic().getX().toString(10),
-        kR2Dash.getPublic().getY().toString(10),
+        x.toString(10),
+        r.toString(10),
+        Y.getPublic().getX().toString(10),
+        Y.getPublic().getY().toString(10),
+        H.getPublic().getX().toString(10),
+        H.getPublic().getY().toString(10),
       ];
 
       const blindVotingArtifact = await artifacts.readArtifact("BlindVoting");
@@ -107,8 +85,85 @@ describe("Unit tests for BlindVoting", function () {
       )) as BlindVoting;
     });
 
-    it("should create valid blind signatures", async function () {
-      // this.blindVoting.connect(this.signers.admin).requestBlindSign();
+    it("should deploy contract", async function () {
+      // expect(await this.blindVoting.connect(this.signers.admin))
+    });
+
+    it("should be able to add new party", async function () {
+      console.log(this.signers.admin.address);
+
+      await this.blindVoting.connect(this.signers.admin).addParty(1022, "PartyA");
+
+      const votes = await this.blindVoting.connect(this.signers.admin).getVotesForPartyCode(1022);
+
+      console.log("new party votes:-", votes);
+
+      assert(votes.toNumber() === 0);
+    });
+
+    it("should generate a signature", async function () {
+      const m = BigInt(1022);
+
+      const hasher = crypto.createHash("sha1");
+      hasher.update(Buffer.from(A.getPrivate().toString(16)));
+      hasher.update(Buffer.from(A.getPublic().getX().toString(16)));
+      hasher.update(Buffer.from(A.getPublic().getY().toString(16)));
+
+      hasher.update(Buffer.from(B.getPrivate().toString(16)));
+      hasher.update(Buffer.from(B.getPublic().getX().toString(16)));
+      hasher.update(Buffer.from(B.getPublic().getY().toString(16)));
+
+      hasher.update(Buffer.from(m.toString(16)));
+
+      u1 = web3BN.toBN(hasher.digest("hex"));
+
+      // console.log("u1:- ", u1.toString(10));
+
+      u2 = u1.add(b);
+
+      z = await this.blindVoting.connect(this.signers.admin).requestBlindSign(u2.toString(10));
+
+      // console.log("z:- ", z.toString());
+
+      assert(z != null);
+    });
+
+    it("should validate the signature", async function () {
+      console.log(this.signers.admin.address);
+
+      P = Y.getPublic().mul(a);
+      Q = Y.getPublic().mul(b);
+
+      const HQ = Q.add(H.getPublic());
+      M = HQ.mul(a);
+
+      const zBN = web3BN.toBN(z.toHexString());
+      const temp1 = zBN.mul(a).add(w);
+
+      const Zdash = this.EC.keyFromPrivate(temp1.toString(16));
+
+      await this.blindVoting
+        .connect(this.signers.admin)
+        .castVote(
+          Zdash.getPublic().getX().toString(10),
+          Zdash.getPublic().getY().toString(10),
+          K.getPublic().getX().toString(10),
+          K.getPublic().getY().toString(10),
+          M.getX().toString(10),
+          M.getY().toString(10),
+          P.getX().toString(10),
+          P.getY().toString(10),
+          u1.toString(10),
+          web3BN.toBN(1022).toString(10),
+        );
+
+      // console.log("isValid:- ", isValid);
+      console.log(this.signers.admin.address);
+
+      const votes = await this.blindVoting.connect(this.signers.admin).getVotesForPartyCode(1022);
+      console.log("votes at new cast:-", votes);
+
+      assert(votes != null);
     });
   });
 });

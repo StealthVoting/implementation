@@ -3,11 +3,13 @@ pragma solidity >=0.8.4;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "./BlindSign.sol";
+import "hardhat/console.sol";
 
 contract BlindVoting is Ownable {
     struct Party {
         uint256 partyCode;
         string partyName;
+        bool exists;
     }
 
     BlindSign public signHelper;
@@ -19,54 +21,57 @@ contract BlindVoting is Ownable {
     mapping(uint256 => uint256) tally;
 
     constructor(
-        uint256 _ecPrivKey,
-        uint256 _k1Dash,
-        uint256 _k2Dash,
-        uint256 _Qx,
-        uint256 _Qy,
-        uint256 _l1,
-        uint256 _l2,
-        uint256 _xr1Dash,
-        uint256 _yr1Dash,
-        uint256 _xr2Dash,
-        uint256 _yr2Dash
+        uint256 _x,
+        uint256 _r,
+        uint256 _Yx,
+        uint256 _Yy,
+        uint256 _Hx,
+        uint256 _Hy
     ) {
-        signHelper = new BlindSign(
-            _ecPrivKey,
-            _k1Dash,
-            _k2Dash,
-            _Qx,
-            _Qy,
-            _l1,
-            _l2,
-            _xr1Dash,
-            _yr1Dash,
-            _xr2Dash,
-            _yr2Dash
-        );
+        console.log(_x, _r);
+
+        signHelper = new BlindSign(_x, _r, _Yx, _Yy, _Hx, _Hy);
     }
+
+    // function getKey() external onlyOwner returns (uint256 x, uint256 y) {
+    //     x = signHelper.Yx;
+    //     y = signHelper.Yy;
+    // }
 
     function addParty(uint256 partyCode, string memory partyName) public onlyOwner {
-        parties[partyCode] = Party(partyCode, partyName);
+        Party memory newParty = parties[partyCode];
+        newParty.partyCode = partyCode;
+        newParty.partyName = partyName;
+        newParty.exists = true;
+
+        parties[partyCode] = newParty;
+
+        console.log(parties[partyCode].partyCode == 1022);
     }
 
-    function getVotesForPartyCode(uint256 partyCode) public view onlyOwner returns (uint256 votes) {
+    function getVotesForPartyCode(uint256 partyCode) public view returns (uint256 votes) {
+        require(parties[partyCode].partyCode == partyCode);
         votes = tally[partyCode];
     }
 
-    function requestBlindSign(uint256 m1Dash, uint256 m2Dash) public view returns (uint256 s1Dash, uint256 s2Dash) {
-        (s1Dash, s2Dash) = signHelper.requestBlindSignature(m1Dash, m2Dash);
+    function requestBlindSign(uint256 u2) public view returns (uint256 z) {
+        z = signHelper.requestBlindSignature(u2);
     }
 
     function castVote(
-        uint256 s,
-        uint256 Rx,
-        uint256 Ry,
-        uint256 r,
+        uint256 ZdashX,
+        uint256 ZdashY,
+        uint256 KX,
+        uint256 KY,
+        uint256 MX,
+        uint256 MY,
+        uint256 PX,
+        uint256 PY,
+        uint256 u1,
         uint256 partyCode
     ) public {
         require(parties[partyCode].partyCode == partyCode);
-        require(signHelper.verifyBlindSignature(s, Rx, Ry, r, partyCode));
+        require(signHelper.verifyBlindSignature(ZdashX, ZdashY, KX, KY, MX, MY, PX, PY, u1));
 
         tally[partyCode] = tally[partyCode] + 1;
     }

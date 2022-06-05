@@ -2,106 +2,75 @@
 pragma solidity >=0.8.4;
 
 import "./helpers/EllipticCurve.sol";
+import "hardhat/console.sol";
 
 contract BlindSign {
-    uint256 private ecPrivKey;
-    uint256 private k1Dash;
-    uint256 private k2Dash;
+    // Private Data
+    uint256 private x;
+    uint256 private r;
 
-    uint256 public l1;
-    uint256 public l2;
+    // Public Data
+    uint256 public Yx; // Y = xG; EC public key
+    uint256 public Yy;
 
-    //EC Public Key
-    uint256 public Qx;
-    uint256 public Qy;
-
-    // R1Dash
-    uint256 public xr1Dash;
-    uint256 public yr1Dash;
-
-    //R2Dash
-    uint256 public xr2Dash;
-    uint256 public yr2Dash;
-
-    uint256 public r1Dash;
-    uint256 public r2Dash;
+    uint256 public Hx; // H = rG; signing public key
+    uint256 public Hy;
 
     //Curve Params
     uint256 public constant GX = 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798;
     uint256 public constant GY = 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8;
     uint256 public constant AA = 0;
-    uint256 public constant BnB = 7;
+    uint256 public constant BB = 7;
     uint256 public constant PP = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEFFFFFC2F;
     uint256 public constant n = 0xFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141;
 
     constructor(
-        uint256 _ecPrivKey,
-        uint256 _k1Dash,
-        uint256 _k2Dash,
-        uint256 _Qx,
-        uint256 _Qy,
-        uint256 _l1,
-        uint256 _l2,
-        uint256 _xr1Dash,
-        uint256 _yr1Dash,
-        uint256 _xr2Dash,
-        uint256 _yr2Dash
+        uint256 _x,
+        uint256 _r,
+        uint256 _Yx,
+        uint256 _Yy,
+        uint256 _Hx,
+        uint256 _Hy
     ) {
-        ecPrivKey = _ecPrivKey;
-        k1Dash = _k1Dash;
-        k2Dash = _k2Dash;
-
-        Qx = _Qx;
-        Qy = _Qy;
-
-        l1 = _l1;
-        l2 = _l2;
-
-        xr1Dash = _xr1Dash;
-        yr1Dash = _yr1Dash;
-
-        xr2Dash = _xr2Dash;
-        yr2Dash = _yr2Dash;
-
-        r1Dash = xr1Dash % n;
-        r2Dash = xr2Dash % n;
+        x = _x;
+        r = _r;
+        Yx = _Yx;
+        Yy = _Yy;
+        Hx = _Hx;
+        Hy = _Hy;
     }
 
-    function requestBlindSignature(uint256 m1Dash, uint256 m2Dash)
-        public
-        view
-        returns (uint256 s1Dash, uint256 s2Dash)
-    {
-        s1Dash = ((ecPrivKey * m1Dash) % n) - ((r1Dash * k1Dash * l1) % n);
-        s2Dash = ((ecPrivKey * m2Dash) % n) - ((r2Dash * k2Dash * l2) % n);
+    function requestBlindSignature(uint256 u2) public view returns (uint256 z) {
+        z = r + (x * u2);
     }
 
     function verifyBlindSignature(
-        uint256 s,
-        uint256 Rx,
-        uint256 Ry,
-        uint256 r,
-        uint256 m
+        uint256 ZdashX,
+        uint256 ZdashY,
+        uint256 KX,
+        uint256 KY,
+        uint256 MX,
+        uint256 MY,
+        uint256 PX,
+        uint256 PY,
+        uint256 u1
     ) public view returns (bool isValid) {
-        // mQ = sG + rR;
+        uint256 tempKMx;
+        uint256 tempKMy;
+        (tempKMx, tempKMy) = EllipticCurve.ecAdd(KX, KY, MX, MY, AA, PP);
 
-        uint256[2] memory mQ;
+        uint256 lhsX;
+        uint256 lhsY;
+        (lhsX, lhsY) = EllipticCurve.ecSub(ZdashX, ZdashY, tempKMx, tempKMy, AA, PP);
 
-        (mQ[0], mQ[1]) = EllipticCurve.ecMul(m, Qx, Qy, AA, PP);
+        uint256 rhsX;
+        uint256 rhsY;
+        (rhsX, rhsY) = EllipticCurve.ecMul(u1, PX, PY, AA, PP);
 
-        uint256[2] memory sG;
+        console.log("LHS:- ", lhsX, " ", lhsY);
+        console.log("RHS:- ", rhsX, " ", rhsY);
 
-        (sG[0], sG[1]) = EllipticCurve.ecMul(s, GX, GY, AA, PP);
-
-        uint256[2] memory rR;
-
-        (rR[0], rR[1]) = EllipticCurve.ecMul(r, Rx, Ry, AA, PP);
-
-        uint256[2] memory sG_rR;
-
-        (sG_rR[0], sG_rR[1]) = EllipticCurve.ecAdd(sG[0], sG[1], rR[0], rR[1], AA, PP);
-
-        if (mQ[0] == sG_rR[0] && mQ[1] == sG_rR[1]) {
+        if (lhsX == rhsX && lhsY == rhsY) {
             isValid = true;
         } else {
             isValid = false;
