@@ -1,11 +1,14 @@
 import { Box, Center, Heading, Text } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import InsertCard from '../../utils/InsertCard';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import ChooseVote from './ChooseVote';
 import ConfirmVote from './ConfirmVote';
 import './PhaseTwo.css';
 
 function PhaseTwo() {
+  const { parties } = useSelector((state: RootState) => state.admin);
+
   const [partyId, setPartyId] = useState("0");
   const [isPartySelected, setIsPartySelected] = useState(false);
 
@@ -13,24 +16,15 @@ function PhaseTwo() {
     {
       id: "0",
       name: "No Party Selected",
-    },
-    {
-      id: "1",
-      name: "BJP",
-    },
-    {
-      id: "2",
-      name: "Congress",
-    },
-    {
-      id: "3",
-      name: "AAP",
-    },
-    {
-      id: "4",
-      name: "SP",
-    },
+    }
   ]
+
+  parties.forEach(party => {
+    partyData.push({
+      id: party.partyCode,
+      name: party.partyName
+    })
+  })
 
   return (
     <Box>
@@ -43,7 +37,7 @@ function PhaseTwo() {
 
       {!isPartySelected
         ? <ChooseVote partyId={partyId} setPartyId={setPartyId} setIsPartySelected={setIsPartySelected} partyData={partyData} />
-        : <ConfirmVote partyId={partyId} partyData={partyData} />
+        : <ConfirmVote partyId={partyId} partyData={partyData} setIsPartySelected={setIsPartySelected} />
       }
     </Box>
   )

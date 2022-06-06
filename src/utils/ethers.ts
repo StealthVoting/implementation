@@ -2,7 +2,6 @@ import { Wallet, ethers } from "ethers";
 
 import Artifact from "../artifacts/contracts/BlindVoting.sol/BlindVoting.json";
 import { BlindVoting } from "../types";
-import { randNum } from "./functions";
 
 const url = "http://127.0.0.1:8545/";
 const provider = new ethers.providers.JsonRpcProvider(url);

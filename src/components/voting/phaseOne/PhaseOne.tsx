@@ -1,9 +1,7 @@
-import { Box, Button, Center, Heading, Spacer, Stack, Text, Textarea } from '@chakra-ui/react';
+import { Box, Button, Center, Heading, Text, Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { requestBlindSignature } from '../../../reducers/voter';
-import { AppDispatch, RootState } from '../../../store';
-import { generateVoter } from '../../../utils/preVoting';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../../store';
 import { validateVoter } from '../../../utils/voting';
 import CustomLink from '../../utils/CustomLink';
 import InsertCard from '../../utils/InsertCard';
@@ -12,11 +10,9 @@ import './PhaseOne.css';
 function PhaseOne() {
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
-  // const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState("");  // data read successfully
   const [timerCompleted, setTimerCompleted] = useState(false);
 
-  const dispatch = useDispatch<AppDispatch>();
   const { a, b, w, A, B, P, Q, K, M, u1, u2, Zdash, isVoterLoading } = useSelector((state: RootState) => state.voter);
 
   const data = `
@@ -31,8 +27,6 @@ function PhaseOne() {
     K: (${K?.x}, ${K?.y}) \n
   `;
   const temp = "Voter data...";
-
-  console.log(u1, u2, Zdash?.x, Zdash?.y);
 
   return (
     <Box>

@@ -1,9 +1,12 @@
+import { Box } from '@chakra-ui/react';
 import React from 'react';
 import './NoMatch.css';
 
 function NoMatch() {
   return (
-    <div>NoMatch</div>
+    <Box>
+      No Match :(
+    </Box>
   )
 }
 

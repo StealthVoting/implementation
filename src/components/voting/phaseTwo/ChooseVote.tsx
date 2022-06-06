@@ -1,5 +1,5 @@
 import { Box, Button, Center, StackDivider, Text, VStack } from '@chakra-ui/react'
-import React, { useState } from 'react'
+import React from 'react'
 import CustomLink from '../../utils/CustomLink';
 
 type ChooseVoteProps = {
