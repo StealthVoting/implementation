@@ -13,29 +13,11 @@ function CreateVoter() {
   const [storeData, setStoreData] = useState(false);
   const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState(""); // generating voter
-  const [data, setData] = useState("");
 
   const dispatch = useDispatch<AppDispatch>();
-  const { a, b, w, A, B, P, Q, K, M, isLoading } = useSelector((state: RootState) => state.voter);
+  const { a, b, w, A, B, P, Q, K, M, isVoterLoading } = useSelector((state: RootState) => state.voter);
 
   console.log(blindVoting.address);
-
-  console.log(
-    "a", a,
-    "b", b,
-    "w", w,
-    "A.x", A?.x,
-    "A.y", A?.y,
-    "B.x", B?.x,
-    "B.y", B?.y,
-    "P.x", P?.x,
-    "P.y", P?.y,
-    "Q.x", Q?.x,
-    "Q.y", Q?.y,
-    "K.x", K?.x,
-    "K.y", K?.y,
-    "M.x", M?.x,
-    "M.y", M?.y);
 
   return (
     <Box>
@@ -43,13 +25,12 @@ function CreateVoter() {
         <Heading marginTop={"1em"} marginBottom={"1em"} as='h6' noOfLines={1}>Generate a New Voter</Heading>
       </Center>
       <Center>
-        <Button isLoading={isLoading}
+        <Button isLoading={isVoterLoading}
           onClick={() => {
             dispatch(
               createNewVoter()
             )
-
-            generateVoter(setIsLoading, setMessage, setData)
+            setMessage("true");
           }} marginBottom={"2rem"} alignSelf={"center"} colorScheme={"teal"}>Generate Voter</Button>
       </Center>
       <Center marginBottom={"2rem"}>
@@ -86,7 +67,23 @@ function CreateVoter() {
       )}
       {displayData && (
         <Box marginTop={"2rem"}>
-          <Text>Hello {data}</Text>
+          <Text>{`a: ${a}`}</Text>
+          <br />
+          <Text>{`b: ${b}`}</Text>
+          <br />
+          <Text>{`w: ${w}`}</Text>
+          <br />
+          <Text>{`A: (${A?.x}, ${A?.y})`}</Text>
+          <br />
+          <Text>{`B: (${B?.x}, ${B?.y})`}</Text>
+          <br />
+          <Text>{`P: (${P?.x}, ${P?.y})`}</Text>
+          <br />
+          <Text>{`Q: (${Q?.x}, ${Q?.y})`}</Text>
+          <br />
+          <Text>{`M: (${M?.x}, ${M?.y})`}</Text>
+          <br />
+          <Text>{`K: (${K?.x}, ${K?.y})`}</Text>
         </Box>
       )}
     </Box>
