@@ -10,14 +10,27 @@ import InsertCard from '../../utils/InsertCard';
 import './PhaseOne.css';
 
 function PhaseOne() {
-  const [isCompLoading, setIsLoading] = useState(false);
+  const [isButtonLoading, setButtonLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
-  const [displayData, setDisplayData] = useState(false);
+  // const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState("");  // data read successfully
-  const [data, setData] = useState("Voter data...");
+  const [timerCompleted, setTimerCompleted] = useState(false);
 
   const dispatch = useDispatch<AppDispatch>();
-  const { u1, u2, Zdash, isVoterLoading } = useSelector((state: RootState) => state.voter);
+  const { a, b, w, A, B, P, Q, K, M, u1, u2, Zdash, isVoterLoading } = useSelector((state: RootState) => state.voter);
+
+  const data = `
+    a: ${a} \n
+    b: ${b} \n
+    w: ${w} \n
+    A: (${A?.x}, ${A?.y}) \n
+    B: (${B?.x}, ${B?.y}) \n
+    P: (${P?.x}, ${P?.y}) \n
+    Q: (${Q?.x}, ${Q?.y}) \n
+    M: (${M?.x}, ${M?.y}) \n
+    K: (${K?.x}, ${K?.y}) \n
+  `;
+  const temp = "Voter data...";
 
   console.log(u1, u2, Zdash?.x, Zdash?.y);
 
@@ -31,55 +44,35 @@ function PhaseOne() {
       </Center>
 
       <Center>
-        <Text as='i' marginBottom={"2em"}>Select your preference:</Text>
-      </Center>
-      <Stack spacing={4} direction="row" align="center">
         <Button colorScheme={"teal"} variant={"outline"}
           onClick={() => {
             setStoreData(true);
-            setDisplayData(false);
+            setTimerCompleted(false);
           }}>Fetch data from card</Button>
-        <Spacer />
-        <Button isLoading={isVoterLoading} colorScheme={"teal"} variant={"outline"}
-          onClick={() => {
-            dispatch(
-              requestBlindSignature(11) // msg idhar pass karna hai
-            );
+      </Center>
 
-            // setDisplayData(true);
-            // setStoreData(false);
-          }}>Enter data manually</Button>
-      </Stack>
       {storeData && (
         <Center>
-          <InsertCard isLink={false} isSpinner={true} />
+          <InsertCard isLink={false} isSpinner={true} message={'Data fetched successfully from card!'} setTimerCompleted={setTimerCompleted} />
         </Center>
-      )}
-      {displayData && (
-        <Box marginTop={"2rem"}>
-          <Text>Hello {data}</Text>
-        </Box>
       )}
 
       <Box marginY={'2rem'}>
         <Text marginBottom={'1rem'}>Voter Data:</Text>
         <Textarea
           isDisabled={true}
-
-          value={
-            data
-          }
+          value={timerCompleted ? data : temp}
           contentEditable={false}
-          rows={3}
+          rows={15}
           size='md'
         />
       </Box>
 
       <Center>
-        <Button isLoading={isCompLoading}
+        <Button isLoading={isButtonLoading}
           onClick={() => {
-            setIsLoading(!isCompLoading);
-            validateVoter(setIsLoading, setMessage, setData)
+            setButtonLoading(!isButtonLoading);
+            validateVoter(setButtonLoading, setMessage);
           }} marginBottom={"2rem"} alignSelf={"center"} colorScheme={"teal"}>Submit</Button>
       </Center>
 
@@ -92,7 +85,6 @@ function PhaseOne() {
               <CustomLink to={'../phase-two'}>
                 Phase 2
               </CustomLink>
-
             </Button>
           </Box>
         )}

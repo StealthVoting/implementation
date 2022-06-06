@@ -9,7 +9,6 @@ import InsertCard from '../utils/InsertCard';
 import './CreateVoter.css';
 
 function CreateVoter() {
-  const [isCompLoading, setIsLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
   const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState(""); // generating voter
@@ -62,7 +61,7 @@ function CreateVoter() {
       </Stack>
       {storeData && (
         <Center>
-          <InsertCard isLink={false} isSpinner={true} />
+          <InsertCard isLink={false} isSpinner={true} message={"Data stored in card successfully!"} />
         </Center>
       )}
       {displayData && (

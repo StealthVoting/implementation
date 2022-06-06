@@ -1,36 +1,22 @@
 import { Box, Button, Center, StackDivider, Text, VStack } from '@chakra-ui/react'
 import React, { useState } from 'react'
+import CustomLink from '../../utils/CustomLink';
 
-function ChooseVote() {
-  const partyData = [
-    {
-      id: "0",
-      name: "No Party Selected",
-    },
-    {
-      id: "1",
-      name: "BJP",
-    },
-    {
-      id: "2",
-      name: "Congress",
-    },
-    {
-      id: "3",
-      name: "AAP",
-    },
-    {
-      id: "4",
-      name: "SP",
-    },
-  ]
+type ChooseVoteProps = {
+  partyId?: string,
+  setPartyId?: React.Dispatch<React.SetStateAction<string>>,
+  setIsPartySelected?: React.Dispatch<React.SetStateAction<boolean>>,
+  partyData: {
+    id: string;
+    name: string;
+  }[]
+}
 
-  const [partyId, selectParty] = useState("0");
-
+function ChooseVote({ partyId, setPartyId, setIsPartySelected, partyData }: ChooseVoteProps) {
   return (
-    <div style={{ marginTop: "5em" }}>
+    <Box marginTop={"5em"}>
       <Text>
-        Voter here can choose their vote and submit it.
+        Choose your preference:
       </Text>
 
       <VStack
@@ -41,7 +27,12 @@ function ChooseVote() {
         {
           partyData.map(party => (
             party.id !== "0" &&
-            (<Box key={party.id} p={5} shadow='md' borderWidth='1px' borderRadius={'1em'} onClick={() => { selectParty(party.id) }}>
+            (<Box key={party.id} p={5} shadow='md' borderWidth='1px' borderRadius={'1em'}
+              onClick={() => {
+                if (setPartyId !== undefined) {
+                  setPartyId(party.id)
+                }
+              }}>
               <Center>
                 {party.name}
               </Center>
@@ -51,15 +42,21 @@ function ChooseVote() {
       </VStack>
 
       <Text marginTop={"2em"}>
-        {"Selected Party:- " + partyData.find(party => party.id === partyId)?.name}
+        {"Selected Party: " + partyData.find(party => party.id === partyId)?.name}
       </Text>
 
       <Center marginTop={"2em"}>
-        <Button colorScheme={'teal'}>
-          Submit Vote
+        <Button colorScheme={'teal'} disabled={(partyId === "0")} onClick={() => {
+          if (setIsPartySelected !== undefined) {
+            setIsPartySelected(true)
+          }
+        }}>
+          <CustomLink to={''}>
+            Proceed
+          </CustomLink>
         </Button>
       </Center>
-    </div >
+    </Box >
   )
 }
 
