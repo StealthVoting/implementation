@@ -40,7 +40,6 @@ function App() {
         <Route path="phase-one" element={<PhaseOne />} />
         <Route path="phase-two" >
           <Route index element={<PhaseTwo />} />
-          <Route path="choose-vote" element={<ChooseVote />} />
         </Route>
         <Route path="stats" element={<Stats />} />
         <Route path="admin">

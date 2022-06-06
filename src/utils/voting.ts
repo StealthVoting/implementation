@@ -1,8 +1,7 @@
-const validateVoter = (setIsLoading, setMessage, setData) => {
+const validateVoter = (setButtonLoading, setMessage) => {
   setTimeout(async () => {
-    setIsLoading(false);
+    setButtonLoading(false);
     setMessage("true");
-    setData("Something useless");
   }, 1500);
 };
 
