@@ -83,9 +83,14 @@ export const requestBlindSignature = createAsyncThunk(
   },
 );
 
-// export const validateBlindSignature = createAsyncThunk("voter/validateBlindSignature", async () => {
+export const validateBlindSignature = createAsyncThunk("voter/validateBlindSignature", async (_, { getState }) => {
+  const EC = new ec("secp256k1");
+  const { voter } = getState() as RootState;
 
-// });
+  const Zdash = EC.keyFromPublic({ x: String(voter.Zdash?.x), y: String(voter.Zdash?.y) });
+
+  console.log(Zdash.getPublic().getX().toString(16), " ", Zdash.getPublic().getY().toString(16));
+});
 
 export interface VoterInitState {
   a: string | null;
