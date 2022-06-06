@@ -1,8 +1,9 @@
 import { ethers } from "ethers";
-import { BlindVoting } from "../types";
-import Artifact from "../artifacts/contracts/BlindVoting.sol/BlindVoting.json";
 
-const url = "http://127.0.0.1:8545/"
+import Artifact from "../artifacts/contracts/BlindVoting.sol/BlindVoting.json";
+import { BlindVoting } from "../types";
+
+const url = "http://127.0.0.1:8545/";
 const provider = new ethers.providers.JsonRpcProvider(url);
 
 let signer: ethers.providers.JsonRpcSigner;
@@ -19,13 +20,6 @@ const initEther = async () => {
 
   blindVoting = new ethers.Contract(signerAddress, Artifact.abi, provider) as BlindVoting;
   blindVotingAdmin = new ethers.Contract(adminAddress, Artifact.abi, provider) as BlindVoting;
-}
+};
 
-export {
-  provider,
-  signer,
-  adminSigner,
-  blindVoting,
-  blindVotingAdmin,
-  initEther
-}
+export { provider, signer, adminSigner, blindVoting, blindVotingAdmin, initEther };

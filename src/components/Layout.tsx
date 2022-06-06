@@ -33,11 +33,7 @@ const LinksData = [
   },
   {
     path: "/phase-one",
-    name: "Phase One"
-  },
-  {
-    path: "/phase-two",
-    name: "Phase Two"
+    name: "Voting"
   },
 ];
 
