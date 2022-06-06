@@ -22,7 +22,7 @@ function App() {
         setBlindVoting(true);
       })
       .catch(() => {
-        console.error("Etherjs cannot be inited");
+        console.error("Etherjs cannot be initialized");
       });
   }, [])
 

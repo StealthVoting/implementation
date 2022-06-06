@@ -21,3 +21,11 @@
 .container-width {
   max-width: 80rem;
 }
+
+.success-message {
+  color: green;
+}
+
+.error-message {
+  color: red;
+}
