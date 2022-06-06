@@ -8,9 +8,9 @@ import PhaseOne from "./components/voting/phaseOne/PhaseOne";
 import PhaseTwo from "./components/voting/phaseTwo/PhaseTwo";
 import './App.css'
 import Stats from "./components/afterVoting/Stats";
-import ChooseVote from "./components/voting/phaseTwo/ChooseVote";
 import CreateParty from "./components/preVoting/CreateParty";
 import { blindVoting, initEther } from "./utils/ethers";
+import Success from "./components/afterVoting/Success";
 
 function App() {
   const [loadVoting, setBlindVoting] = useState(false);
@@ -38,9 +38,8 @@ function App() {
         <Route index element={<Home />} />
         <Route path="create-voter" element={<CreateVoter />} />
         <Route path="phase-one" element={<PhaseOne />} />
-        <Route path="phase-two" >
-          <Route index element={<PhaseTwo />} />
-        </Route>
+        <Route path="phase-two" element={<PhaseTwo />} />
+        <Route path="success" element={<Success />} />
         <Route path="stats" element={<Stats />} />
         <Route path="admin">
           <Route index element={<Home />} />

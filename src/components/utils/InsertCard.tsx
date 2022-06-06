@@ -1,9 +1,7 @@
 import { Box, Center, Button, Spinner, Text } from '@chakra-ui/react'
 import React, { useState } from 'react'
 import { AiOutlineWifi, AiOutlineArrowRight } from 'react-icons/ai'
-import { useSelector } from 'react-redux'
 import { LinkProps } from 'react-router-dom'
-import { RootState } from '../../store'
 import CustomLink from './CustomLink'
 
 type InsertIconProps = {

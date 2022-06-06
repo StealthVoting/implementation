@@ -1,10 +1,9 @@
 import { Box, Button, Center, Heading, Spacer, Stack, Text } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { createNewVoter } from '../../reducers/voter';
 import { AppDispatch, RootState } from '../../store';
-import { blindVoting, blindVotingAdmin } from '../../utils/ethers';
-import { generateVoter } from '../../utils/preVoting';
+import { blindVoting } from '../../utils/ethers';
 import InsertCard from '../utils/InsertCard';
 import './CreateVoter.css';
 
