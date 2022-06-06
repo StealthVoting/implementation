@@ -41,7 +41,7 @@ function ChooseVote() {
         {
           partyData.map(party => (
             party.id !== "0" &&
-            (<Box id={party.id} p={5} shadow='md' borderWidth='1px' borderRadius={'1em'} onClick={() => { selectParty(party.id) }}>
+            (<Box key={party.id} p={5} shadow='md' borderWidth='1px' borderRadius={'1em'} onClick={() => { selectParty(party.id) }}>
               <Center>
                 {party.name}
               </Center>

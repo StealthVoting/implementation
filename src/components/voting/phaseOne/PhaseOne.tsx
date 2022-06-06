@@ -1,5 +1,8 @@
 import { Box, Button, Center, Heading, Spacer, Stack, Text, Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { requestBlindSignature } from '../../../reducers/voter';
+import { AppDispatch, RootState } from '../../../store';
 import { generateVoter } from '../../../utils/preVoting';
 import { validateVoter } from '../../../utils/voting';
 import CustomLink from '../../utils/CustomLink';
@@ -7,11 +10,16 @@ import InsertCard from '../../utils/InsertCard';
 import './PhaseOne.css';
 
 function PhaseOne() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCompLoading, setIsLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
   const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState("");  // data read successfully
   const [data, setData] = useState("Voter data...");
+
+  const dispatch = useDispatch<AppDispatch>();
+  const { u1, u2, Zdash, isLoading } = useSelector((state: RootState) => state.voter);
+
+  console.log(u1, u2, Zdash?.x, Zdash?.y);
 
   return (
     <Box>
@@ -32,10 +40,14 @@ function PhaseOne() {
             setDisplayData(false);
           }}>Fetch data from card</Button>
         <Spacer />
-        <Button colorScheme={"teal"} variant={"outline"}
+        <Button isLoading={isLoading} colorScheme={"teal"} variant={"outline"}
           onClick={() => {
-            setDisplayData(true);
-            setStoreData(false);
+            dispatch(
+              requestBlindSignature(11) // msg idhar pass karna hai
+            );
+
+            // setDisplayData(true);
+            // setStoreData(false);
           }}>Enter data manually</Button>
       </Stack>
       {storeData && (
@@ -64,9 +76,9 @@ function PhaseOne() {
       </Box>
 
       <Center>
-        <Button isLoading={isLoading}
+        <Button isLoading={isCompLoading}
           onClick={() => {
-            setIsLoading(!isLoading);
+            setIsLoading(!isCompLoading);
             validateVoter(setIsLoading, setMessage, setData)
           }} marginBottom={"2rem"} alignSelf={"center"} colorScheme={"teal"}>Submit</Button>
       </Center>

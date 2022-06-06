@@ -1,18 +1,41 @@
 import { Box, Button, Center, Heading, Spacer, Stack, Text } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
+import { createNewVoter } from '../../reducers/voter';
+import { AppDispatch, RootState } from '../../store';
 import { blindVoting, blindVotingAdmin } from '../../utils/ethers';
 import { generateVoter } from '../../utils/preVoting';
 import InsertCard from '../utils/InsertCard';
 import './CreateVoter.css';
 
 function CreateVoter() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isCompLoading, setIsLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
   const [displayData, setDisplayData] = useState(false);
   const [message, setMessage] = useState(""); // generating voter
   const [data, setData] = useState("");
 
+  const dispatch = useDispatch<AppDispatch>();
+  const { a, b, w, A, B, P, Q, K, M, isLoading } = useSelector((state: RootState) => state.voter);
+
   console.log(blindVoting.address);
+
+  console.log(
+    "a", a,
+    "b", b,
+    "w", w,
+    "A.x", A?.x,
+    "A.y", A?.y,
+    "B.x", B?.x,
+    "B.y", B?.y,
+    "P.x", P?.x,
+    "P.y", P?.y,
+    "Q.x", Q?.x,
+    "Q.y", Q?.y,
+    "K.x", K?.x,
+    "K.y", K?.y,
+    "M.x", M?.x,
+    "M.y", M?.y);
 
   return (
     <Box>
@@ -22,7 +45,10 @@ function CreateVoter() {
       <Center>
         <Button isLoading={isLoading}
           onClick={() => {
-            setIsLoading(!isLoading);
+            dispatch(
+              createNewVoter()
+            )
+
             generateVoter(setIsLoading, setMessage, setData)
           }} marginBottom={"2rem"} alignSelf={"center"} colorScheme={"teal"}>Generate Voter</Button>
       </Center>

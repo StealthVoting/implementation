@@ -59,7 +59,7 @@ export default function Layout() {
               spacing={4}
               display={{ base: 'none', md: 'flex' }}>
               {LinksData.map((data) => (
-                <CustomLink to={data.path}>{data.name}</CustomLink>
+                <CustomLink key={data.path} to={data.path}>{data.name}</CustomLink>
               ))}
             </HStack>
           </HStack>
@@ -94,7 +94,7 @@ export default function Layout() {
           <Box pb={4} display={{ md: 'none' }}>
             <Stack as={'nav'} spacing={4}>
               {LinksData.map((data) => (
-                <CustomLink to={data.path}>{data.name}</CustomLink>
+                <CustomLink key={data.path} to={data.path}>{data.name}</CustomLink>
               ))}
             </Stack>
           </Box>
