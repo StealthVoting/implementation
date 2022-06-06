@@ -107,7 +107,7 @@ export interface VoterInitState {
   u2?: string | null;
   Zdash?: { x: string; y: string } | null;
 
-  isLoading: boolean;
+  isVoterLoading: boolean;
 }
 
 const voterSlice = createSlice({
@@ -125,13 +125,13 @@ const voterSlice = createSlice({
     u1: null,
     u2: null,
     Zdash: null,
-    isLoading: false,
+    isVoterLoading: false,
   } as VoterInitState,
   reducers: {},
   extraReducers: builder => {
     builder
       .addCase(createNewVoter.pending, (state, action) => {
-        state.isLoading = true;
+        state.isVoterLoading = true;
       })
       .addCase(createNewVoter.fulfilled, (state, action) => {
         state.a = action.payload.a;
@@ -143,16 +143,16 @@ const voterSlice = createSlice({
         state.M = action.payload.M;
         state.P = action.payload.P;
         state.Q = action.payload.Q;
-        state.isLoading = false;
+        state.isVoterLoading = false;
       })
       .addCase(requestBlindSignature.pending, (state, action) => {
-        state.isLoading = true;
+        state.isVoterLoading = true;
       })
       .addCase(requestBlindSignature.fulfilled, (state, action) => {
         state.Zdash = action.payload.Zdash;
         state.u1 = action.payload.u1;
         state.u2 = action.payload.u2;
-        state.isLoading = false;
+        state.isVoterLoading = false;
       });
   },
 });

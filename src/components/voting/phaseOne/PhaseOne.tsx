@@ -17,7 +17,7 @@ function PhaseOne() {
   const [data, setData] = useState("Voter data...");
 
   const dispatch = useDispatch<AppDispatch>();
-  const { u1, u2, Zdash, isLoading } = useSelector((state: RootState) => state.voter);
+  const { u1, u2, Zdash, isVoterLoading } = useSelector((state: RootState) => state.voter);
 
   console.log(u1, u2, Zdash?.x, Zdash?.y);
 
@@ -40,7 +40,7 @@ function PhaseOne() {
             setDisplayData(false);
           }}>Fetch data from card</Button>
         <Spacer />
-        <Button isLoading={isLoading} colorScheme={"teal"} variant={"outline"}
+        <Button isLoading={isVoterLoading} colorScheme={"teal"} variant={"outline"}
           onClick={() => {
             dispatch(
               requestBlindSignature(11) // msg idhar pass karna hai
@@ -94,7 +94,6 @@ function PhaseOne() {
               </CustomLink>
 
             </Button>
-
           </Box>
         )}
         {(message === "false") && (
