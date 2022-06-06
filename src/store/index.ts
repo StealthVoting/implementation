@@ -2,6 +2,7 @@ import { combineReducers, configureStore, getDefaultMiddleware } from "@reduxjs/
 import { persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
+import adminReducer from "../reducers/admin";
 import voterReducer from "../reducers/voter";
 
 const persistConfig = {
@@ -11,6 +12,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   voter: voterReducer,
+  admin: adminReducer,
 });
 
 const persReducer = persistReducer(persistConfig, reducer);

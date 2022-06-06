@@ -139,5 +139,6 @@
   "resolutions": {
     "cipher-base@1.0.4": "patch:cipher-base@npm:1.0.4#.yarn/patches/cipher-base-npm-1.0.4-2e98b97140.patch",
     "assert@2.0.0": "patch:assert@npm:2.0.0#.yarn/patches/assert-npm-2.0.0-ef73bc19f5.patch"
-  }
+  },
+  "proxy": "http://localhost:3001/"
 }

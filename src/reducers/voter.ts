@@ -1,10 +1,9 @@
 import { AsyncThunkOptions, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ec } from "elliptic";
-import { BigNumber } from "ethers";
 import sha1 from "js-sha1";
 import * as web3BN from "web3-utils";
 
-import { AppDispatch, RootState } from "../store";
+import { RootState } from "../store";
 import { blindVoting } from "../utils/ethers";
 import { randNum } from "../utils/functions";
 
@@ -15,32 +14,32 @@ export const createNewVoter = createAsyncThunk("voter/createNewVoter", async () 
   const b = randNum();
   const w = randNum();
 
-  const A = EC.keyFromPrivate(a.toHexString());
-  const B = EC.keyFromPrivate(b.toHexString());
-  const K = EC.keyFromPrivate(w.toHexString());
+  const A = EC.keyFromPrivate(a.toBigInt().toString(16));
+  const B = EC.keyFromPrivate(b.toBigInt().toString(16));
+  const K = EC.keyFromPrivate(w.toBigInt().toString(16));
 
   const Y = await blindVoting.getY();
   const H = await blindVoting.getH();
 
-  const Ypoint = EC.keyFromPublic({ x: Y.x.toHexString(), y: Y.y.toHexString() });
-  const Hpoint = EC.keyFromPublic({ x: H.x.toHexString(), y: H.y.toHexString() });
+  const Ypoint = EC.keyFromPublic({ x: Y.x.toBigInt().toString(16), y: Y.y.toBigInt().toString(16) });
+  const Hpoint = EC.keyFromPublic({ x: H.x.toBigInt().toString(16), y: H.y.toBigInt().toString(16) });
 
-  const P = Ypoint.getPublic().mul(web3BN.toBN(a.toHexString()));
-  const Q = Ypoint.getPublic().mul(web3BN.toBN(b.toHexString()));
+  const P = Ypoint.getPublic().mul(web3BN.toBN(a.toBigInt().toString(16)));
+  const Q = Ypoint.getPublic().mul(web3BN.toBN(b.toBigInt().toString(16)));
 
   const HQ = Q.add(Hpoint.getPublic());
-  const M = HQ.mul(web3BN.toBN(a.toHexString()));
+  const M = HQ.mul(web3BN.toBN(a.toBigInt().toString(16)));
 
   return {
-    a: a.toHexString(),
-    b: b.toHexString(),
-    w: w.toHexString(),
-    A: { x: A.getPublic().getX().toString("hex"), y: A.getPublic().getY().toString("hex") },
-    B: { x: B.getPublic().getX().toString("hex"), y: B.getPublic().getY().toString("hex") },
-    K: { x: K.getPublic().getX().toString("hex"), y: K.getPublic().getY().toString("hex") },
-    P: { x: P.getX().toString("hex"), y: P.getY().toString("hex") },
-    Q: { x: Q.getX().toString("hex"), y: Q.getY().toString("hex") },
-    M: { x: M.getX().toString("hex"), y: M.getY().toString("hex") },
+    a: "0x" + a.toBigInt().toString(16),
+    b: "0x" + b.toBigInt().toString(16),
+    w: "0x" + w.toBigInt().toString(16),
+    A: { x: A.getPublic().getX().toString(16), y: A.getPublic().getY().toString(16) },
+    B: { x: B.getPublic().getX().toString(16), y: B.getPublic().getY().toString(16) },
+    K: { x: K.getPublic().getX().toString(16), y: K.getPublic().getY().toString(16) },
+    P: { x: P.getX().toString(16), y: P.getY().toString(16) },
+    Q: { x: Q.getX().toString(16), y: Q.getY().toString(16) },
+    M: { x: M.getX().toString(16), y: M.getY().toString(16) },
   } as VoterInitState;
 });
 
@@ -52,45 +51,73 @@ export const requestBlindSignature = createAsyncThunk(
     const { voter } = getState() as RootState;
 
     const hasher = sha1.create();
-    hasher.update(String(voter.a));
+    hasher.update(web3BN.toBN(String(voter.a)).toString(16));
     hasher.update(String(voter.A?.x));
     hasher.update(String(voter.A?.y));
 
-    hasher.update(String(voter.b));
+    hasher.update(web3BN.toBN(String(voter.b)).toString(16));
     hasher.update(String(voter.B?.x));
     hasher.update(String(voter.B?.y));
 
-    hasher.update(String(args));
+    hasher.update(web3BN.toBN(args).toString(16));
 
-    const u1 = "0x" + hasher.hex();
-    // console.log(u1);
+    const a = web3BN.toBN(String(voter.a));
+    const b = web3BN.toBN(String(voter.b));
+    const w = web3BN.toBN(String(voter.w));
+    const u1 = web3BN.toBN("0x" + hasher.hex());
+    const u2 = u1.add(b);
 
-    const u2 = BigNumber.from(u1).add(BigNumber.from(voter.b)).toHexString();
+    console.log(u1.toString(10), u2.toString(10));
 
-    const z = await blindVoting.requestBlindSign(u2);
+    const z = await blindVoting.requestBlindSign(u2.toString(10));
 
-    const temp1 = z.mul(BigNumber.from(voter.a)).add(BigNumber.from(voter.w));
-    const Zdash = EC.keyFromPrivate(temp1.toHexString());
+    const zBN = web3BN.toBN(z.toHexString());
+    const temp1 = zBN.mul(a).add(w);
+    // const temp1 = z.mul(BigNumber.from(voter.a)).add(BigNumber.from(voter.w));
+    const Zdash = EC.keyFromPrivate(temp1.toString(16));
 
     return {
       Zdash: {
         x: Zdash.getPublic().getX().toString(16),
         y: Zdash.getPublic().getY().toString(16),
       },
-      u1,
-      u2,
+      u1: "0x" + u1.toString(16),
+      u2: "0x" + u2.toString(16),
     };
   },
 );
 
-export const validateBlindSignature = createAsyncThunk("voter/validateBlindSignature", async (_, { getState }) => {
-  const EC = new ec("secp256k1");
-  const { voter } = getState() as RootState;
+export const validateBlindSignature = createAsyncThunk(
+  "voter/validateBlindSignature",
+  async (args: number, { getState }) => {
+    const EC = new ec("secp256k1");
+    const { voter } = getState() as RootState;
 
-  const Zdash = EC.keyFromPublic({ x: String(voter.Zdash?.x), y: String(voter.Zdash?.y) });
+    const Zdash = EC.keyFromPublic({ x: String(voter.Zdash?.x), y: String(voter.Zdash?.y) });
+    const K = EC.keyFromPublic({ x: String(voter.K?.x), y: String(voter.K?.y) });
+    const M = EC.keyFromPublic({ x: String(voter.M?.x), y: String(voter.M?.y) });
+    const P = EC.keyFromPublic({ x: String(voter.P?.x), y: String(voter.P?.y) });
 
-  console.log(Zdash.getPublic().getX().toString(16), " ", Zdash.getPublic().getY().toString(16));
-});
+    const u1 = web3BN.toBN(String(voter.u1));
+
+    try {
+      await blindVoting.castVote(
+        Zdash.getPublic().getX().toString(10),
+        Zdash.getPublic().getY().toString(10),
+        K.getPublic().getX().toString(10),
+        K.getPublic().getY().toString(10),
+        M.getPublic().getX().toString(10),
+        M.getPublic().getY().toString(10),
+        P.getPublic().getX().toString(10),
+        P.getPublic().getY().toString(10),
+        u1.toString(10),
+        web3BN.toBN(args).toString(10),
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  },
+);
 
 export interface VoterInitState {
   a: string | null;
@@ -152,6 +179,12 @@ const voterSlice = createSlice({
         state.Zdash = action.payload.Zdash;
         state.u1 = action.payload.u1;
         state.u2 = action.payload.u2;
+        state.isVoterLoading = false;
+      })
+      .addCase(validateBlindSignature.pending, (state, action) => {
+        //
+      })
+      .addCase(validateBlindSignature.fulfilled, (state, action) => {
         state.isVoterLoading = false;
       });
   },

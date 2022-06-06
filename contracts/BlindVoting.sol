@@ -53,7 +53,7 @@ contract BlindVoting is Ownable {
     }
 
     function getVotesForPartyCode(uint256 partyCode) public view returns (uint256 votes) {
-        require(parties[partyCode].partyCode == partyCode);
+        require(parties[partyCode].partyCode == partyCode, "Party Code doesn't exist");
         votes = tally[partyCode];
     }
 
@@ -73,8 +73,8 @@ contract BlindVoting is Ownable {
         uint256 u1,
         uint256 partyCode
     ) public {
-        require(parties[partyCode].partyCode == partyCode);
-        require(signHelper.verifyBlindSignature(ZdashX, ZdashY, KX, KY, MX, MY, PX, PY, u1));
+        require(parties[partyCode].partyCode == partyCode, "Party Code doesn't exist");
+        require(signHelper.verifyBlindSignature(ZdashX, ZdashY, KX, KY, MX, MY, PX, PY, u1), "Sign not valid");
 
         tally[partyCode] = tally[partyCode] + 1;
     }
