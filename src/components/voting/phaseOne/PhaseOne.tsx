@@ -12,7 +12,7 @@ function PhaseOne() {
   const [message, setMessage] = useState("");  // data read successfully
   const [timerCompleted, setTimerCompleted] = useState(false);
 
-  const { a, b, w, A, B, P, Q, K, M, u1, u2, isVoterValid, isVoterLoading } = useSelector((state: RootState) => state.voter);
+  const { a, b, w, A, B, P, Q, K, M, u1, u2, isVoterLoading } = useSelector((state: RootState) => state.voter);
 
   const data = `
     a: ${a} \n

@@ -152,7 +152,6 @@ export interface VoterInitState {
   u2?: string | null;
   Zdash?: { x: string; y: string } | null;
 
-  isVoterValid: boolean;
   isVoterLoading: boolean;
 }
 
@@ -171,7 +170,6 @@ const voterSlice = createSlice({
     u1: null,
     u2: null,
     Zdash: null,
-    isVoterValid: false,
     isVoterLoading: false,
   } as VoterInitState,
   reducers: {},
