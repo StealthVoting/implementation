@@ -30,6 +30,24 @@ export const createNewVoter = createAsyncThunk("voter/createNewVoter", async () 
   const HQ = Q.add(Hpoint.getPublic());
   const M = HQ.mul(web3BN.toBN(a.toBigInt().toString(16)));
 
+  const { pubKey } = await fetch("/idp").then(response => {
+    return response.json();
+  });
+
+  console.log(pubKey);
+
+  const IDPKey = EC.keyFromPublic({ x: pubKey.x, y: pubKey.y });
+
+  const R = IDPKey.getPublic().mul(web3BN.toBN(a.toBigInt().toString(16)));
+
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+    body: JSON.stringify({ voterR: R.encode("hex", false) }),
+  };
+
+  fetch("/voter", requestOptions).then(response => console.log(response));
+
   return {
     a: "0x" + a.toBigInt().toString(16),
     b: "0x" + b.toBigInt().toString(16),
@@ -119,6 +137,20 @@ export const validateBlindSignature = createAsyncThunk(
   },
 );
 
+export const validateRequester = createAsyncThunk("voter/validateVoter", async (_, { getState }) => {
+  const { voter } = getState() as RootState;
+
+  const requestOptions = {
+    method: "POST",
+    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
+    body: JSON.stringify({ voterA: { x: voter.A?.x, y: voter.A?.y } }),
+  };
+
+  const voterFetch = await fetch("/idp/validate-voter", requestOptions).then(response => response.json());
+
+  return voterFetch.isVoterEligible;
+});
+
 export interface VoterInitState {
   a: string | null;
   b: string | null;
@@ -134,6 +166,7 @@ export interface VoterInitState {
   u2?: string | null;
   Zdash?: { x: string; y: string } | null;
 
+  isVoterValid: boolean;
   isVoterLoading: boolean;
 }
 
@@ -152,6 +185,7 @@ const voterSlice = createSlice({
     u1: null,
     u2: null,
     Zdash: null,
+    isVoterValid: false,
     isVoterLoading: false,
   } as VoterInitState,
   reducers: {},
@@ -186,6 +220,13 @@ const voterSlice = createSlice({
       })
       .addCase(validateBlindSignature.fulfilled, (state, action) => {
         state.isVoterLoading = false;
+      })
+      .addCase(validateRequester.pending, (state, action) => {
+        state.isVoterLoading = true;
+      })
+      .addCase(validateRequester.fulfilled, (state, action) => {
+        state.isVoterLoading = false;
+        state.isVoterValid = action.payload;
       });
   },
 });

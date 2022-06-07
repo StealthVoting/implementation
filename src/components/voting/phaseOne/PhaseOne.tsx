@@ -1,7 +1,8 @@
 import { Box, Button, Center, Heading, Text, Textarea } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../../store';
+import { useDispatch, useSelector } from 'react-redux';
+import { validateRequester } from '../../../reducers/voter';
+import { AppDispatch, RootState } from '../../../store';
 import { validateVoter } from '../../../utils/voting';
 import CustomLink from '../../utils/CustomLink';
 import InsertCard from '../../utils/InsertCard';
@@ -10,10 +11,12 @@ import './PhaseOne.css';
 function PhaseOne() {
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [storeData, setStoreData] = useState(false);
-  const [message, setMessage] = useState("");  // data read successfully
+  // const [message, setMessage] = useState("");  // data read successfully
   const [timerCompleted, setTimerCompleted] = useState(false);
 
-  const { a, b, w, A, B, P, Q, K, M, u1, u2, Zdash, isVoterLoading } = useSelector((state: RootState) => state.voter);
+  const dispatch = useDispatch<AppDispatch>();
+
+  const { a, b, w, A, B, P, Q, K, M, u1, u2, isVoterValid, isVoterLoading } = useSelector((state: RootState) => state.voter);
 
   const data = `
     a: ${a} \n
@@ -63,15 +66,19 @@ function PhaseOne() {
       </Box>
 
       <Center>
-        <Button isLoading={isButtonLoading}
+        <Button isLoading={isVoterLoading}
           onClick={() => {
-            setButtonLoading(!isButtonLoading);
-            validateVoter(setButtonLoading, setMessage);
+            dispatch(
+              validateRequester()
+            )
+
+            // setButtonLoading(!isButtonLoading);
+            // validateVoter(setButtonLoading, setMessage);
           }} marginBottom={"2rem"} alignSelf={"center"} colorScheme={"teal"}>Submit</Button>
       </Center>
 
       <Center marginBottom={"2rem"}>
-        {(message === "true") && (
+        {(isVoterValid === true) && (
           <Box>
             <Text as='i' fontSize={'sm'} className='success-message' marginBottom={'1rem'}>Data verified! Please proceed to </Text>
 
@@ -82,7 +89,7 @@ function PhaseOne() {
             </Button>
           </Box>
         )}
-        {(message === "false") && (
+        {(isVoterValid === false) && (
           <Text as='i' fontSize={'sm'} className='error-message'>Error! Please contact administrator.</Text>
         )}
       </Center>
