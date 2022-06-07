@@ -30,7 +30,7 @@ function Stats() {
               getVotesForPartyCode(Number(partyCode))
             )
           }}
-        >Create New Party
+        >Get vote count
         </Button>
 
         <Text marginTop={"2em"}>{currPartyVotes}</Text>

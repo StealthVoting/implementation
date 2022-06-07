@@ -1,7 +1,7 @@
 import { Box, Button, Center, Heading, Spacer, Stack, StackDivider, Text, VStack } from '@chakra-ui/react'
 import React from 'react'
 import { useDispatch } from 'react-redux';
-import { requestBlindSignature } from '../../../reducers/voter';
+import { validateBlindSignature } from '../../../reducers/voter';
 import { AppDispatch } from '../../../store';
 import CustomLink from '../../utils/CustomLink';
 
@@ -48,12 +48,10 @@ function ConfirmVote({ partyId, partyData, setIsPartySelected }: ConfirmVoteProp
             setIsPartySelected(false);
           }}>Back</Button>
         <Spacer />
-        <Button colorScheme={"teal"}
-          onClick={() => {
-            dispatch(
-              requestBlindSignature(Number(code))
-            );
-          }}>
+        <Button colorScheme={"teal"} onClick={() => {
+          dispatch(validateBlindSignature(Number(code)))
+        }}
+        >
           <CustomLink to={"../success"}>
             Submit
           </CustomLink>
