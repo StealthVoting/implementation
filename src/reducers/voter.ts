@@ -137,20 +137,6 @@ export const validateBlindSignature = createAsyncThunk(
   },
 );
 
-export const validateRequester = createAsyncThunk("voter/validateVoter", async (_, { getState }) => {
-  const { voter } = getState() as RootState;
-
-  const requestOptions = {
-    method: "POST",
-    headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" },
-    body: JSON.stringify({ voterA: { x: voter.A?.x, y: voter.A?.y } }),
-  };
-
-  const voterFetch = await fetch("/idp/validate-voter", requestOptions).then(response => response.json());
-
-  return voterFetch.isVoterEligible;
-});
-
 export interface VoterInitState {
   a: string | null;
   b: string | null;
@@ -220,13 +206,6 @@ const voterSlice = createSlice({
       })
       .addCase(validateBlindSignature.fulfilled, (state, action) => {
         state.isVoterLoading = false;
-      })
-      .addCase(validateRequester.pending, (state, action) => {
-        state.isVoterLoading = true;
-      })
-      .addCase(validateRequester.fulfilled, (state, action) => {
-        state.isVoterLoading = false;
-        state.isVoterValid = action.payload;
       });
   },
 });
